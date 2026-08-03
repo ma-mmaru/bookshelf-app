@@ -13,7 +13,29 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', [BookController::class, 'index']);
+Route::get('/books', [BookController::class, 'index'])->name('books.index');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/books', [BookController::class, 'index'])->name('books.index');
+    Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
+    Route::post('/books', [BookController::class, 'store'])->name('books.store');
 });
+
+Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+
+//あとで実装するランキング機能
+Route::get('/ranking', fn() => 'ランキング画面')->name('ranking.index');
+
+//あとで実装するお気に入り一覧
+Route::get('/favorites', fn() => 'お気に入り一覧画面')->name('favorites.index');
+
+//あとで実装するジャンル一覧
+Route::get('/genres', fn() => 'ジャンル一覧画面')->name('genres.index');
+
+//あとで実装するお気に入り登録・解除機能
+Route::post('/books/{book}/favorite', fn() => back())->name('favorites.toggle');
+
+//あとで実像するレビュー関連
+Route::post('/books/{book}/reviews', fn () => back())->name('reviews.store');
+
+Route::post('/reviews/{review}/like', fn() => back())->name('reviews.like');

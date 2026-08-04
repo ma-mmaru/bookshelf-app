@@ -23,4 +23,11 @@ class ReviewController extends Controller
 
         return back()->with('status', 'レビューを投稿しました。');
     }
+
+    public function like(Review $review)
+    {
+        auth()->user()->likedReviews()->toggle($review->id);
+
+        return back();
+    }
 }

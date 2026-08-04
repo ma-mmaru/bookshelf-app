@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::post('/books/{book}/favorites', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
     Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::post('/reviews/{review}/like', [ReviewController::class, 'like'])->name('reviews.like');
 });
 
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
@@ -35,6 +36,3 @@ Route::get('/favorites', fn() => 'お気に入り一覧画面')->name('favorites
 
 //あとで実装するジャンル一覧
 Route::get('/genres', fn() => 'ジャンル一覧画面')->name('genres.index');
-
-//あとで実像するレビュー関連
-Route::post('/reviews/{review}/like', fn() => back())->name('reviews.like');

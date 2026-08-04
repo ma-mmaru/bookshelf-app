@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,7 @@ Route::get('/books', [BookController::class, 'index'])->name('books.index');
 Route::middleware(['auth'])->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
+    Route::post('/books/{book}/favorites', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
 });
 
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
@@ -31,9 +33,6 @@ Route::get('/favorites', fn() => 'お気に入り一覧画面')->name('favorites
 
 //あとで実装するジャンル一覧
 Route::get('/genres', fn() => 'ジャンル一覧画面')->name('genres.index');
-
-//あとで実装するお気に入り登録・解除機能
-Route::post('/books/{book}/favorite', fn() => back())->name('favorites.toggle');
 
 //あとで実像するレビュー関連
 Route::post('/books/{book}/reviews', fn () => back())->name('reviews.store');

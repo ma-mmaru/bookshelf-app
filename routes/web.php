@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::post('/books/{book}/favorites', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
+    Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
 });
 
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
@@ -35,6 +37,4 @@ Route::get('/favorites', fn() => 'お気に入り一覧画面')->name('favorites
 Route::get('/genres', fn() => 'ジャンル一覧画面')->name('genres.index');
 
 //あとで実像するレビュー関連
-Route::post('/books/{book}/reviews', fn () => back())->name('reviews.store');
-
 Route::post('/reviews/{review}/like', fn() => back())->name('reviews.like');

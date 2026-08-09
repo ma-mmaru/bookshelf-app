@@ -40,4 +40,21 @@ class BookController extends Controller
 
         return redirect()->route('books.index')->with('success', '書籍を登録しました。');
     }
+
+    public function edit(Book $book)
+    {
+        $this->authorize('update', $book);
+
+        $book->load('genres');
+        return view('books.edit', compact('book'));
+    }
+
+    public function destroy(Book $book)
+    {
+        $this->authorize('delete', $book);
+
+        $book->delete();
+
+        return redirect()->route('books.index')->with('status', '書籍を削除しました。');
+    }
 }

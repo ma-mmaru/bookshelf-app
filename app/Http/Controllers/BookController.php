@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use Illuminate\Http\Request;
+use App\Models\Genre;
+use  App\Http\Requests\BookRequest;
 
 class BookController extends Controller
 {
@@ -25,20 +26,26 @@ class BookController extends Controller
 
     public function create()
     {
-        //あとで実装エラー回避
-        $genres = collect();
+        $genres = Genre::all();
         return view('books.create', compact('genres'));
     }
 
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'max255'],
+        $validated = $request->validated();
+
+        $book = auth()->user()->books()->create([
+            'title' => $validated['title'],
+            'author' => $validated['author'],
+            'isbn' => $validated['isbn'],
+            'published_date' => $validated['published_date'],
+            'description' => $validated['description'] ?? null,
+            'image_url' => $validated['image_url'] ?? null,
         ]);
 
-        Book::create($validated);
+        $book->genres()->sync($validated['genres']);
 
-        return redirect()->route('books.index')->with('success', '書籍を登録しました。');
+        return redirect()->route('books.show', $book)->with('status', '書籍を登録しました。');
     }
 
     public function edit(Book $book)
@@ -46,7 +53,8 @@ class BookController extends Controller
         $this->authorize('update', $book);
 
         $book->load('genres');
-        return view('books.edit', compact('book'));
+        $genres = Genre::all();
+        return view('books.edit', compact('book', 'genres'));
     }
 
     public function destroy(Book $book)

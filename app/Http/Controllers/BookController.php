@@ -57,6 +57,26 @@ class BookController extends Controller
         return view('books.edit', compact('book', 'genres'));
     }
 
+    public function update(BookRequest $request, Book $book)
+    {
+        $this->authorize('update', $book);
+
+        $validated = $request->validated();
+
+        $book->update([
+            'title' => $validated['title'],
+            'author' => $validated['author'],
+            'isbn' => $validated['isbn'],
+            'published_date' => $validated['published_date'],
+            'description' => $validated['description'] ?? null,
+            'image_url' => $validated['image_url'] ?? null,
+        ]);
+
+        $book->genres()->sync($validated['genres']);
+
+        return redirect()->route('books.show', $book)->with('status', '書籍情報を更新しました。');
+    }
+
     public function destroy(Book $book)
     {
         $this->authorize('delete', $book);

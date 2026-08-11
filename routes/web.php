@@ -22,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
+    Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
     Route::post('/books/{book}/favorites', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
     Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
@@ -41,8 +42,3 @@ Route::get('/favorites', fn() => 'お気に入り一覧画面')->name('favorites
 
 //あとで実装するジャンル一覧
 Route::get('/genres', fn() => 'ジャンル一覧画面')->name('genres.index');
-
-//あとで実装する編集機能
-Route::put('/books/{book}', function() {
-    return '編集画面はあとで実装';
-})->name('books.update');

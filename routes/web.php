@@ -30,15 +30,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reviews/{review}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
     Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
 });
 
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
 //あとで実装するランキング機能
 Route::get('/ranking', fn() => 'ランキング画面')->name('ranking.index');
-
-//あとで実装するお気に入り一覧
-Route::get('/favorites', fn() => 'お気に入り一覧画面')->name('favorites.index');
 
 //あとで実装するジャンル一覧
 Route::get('/genres', fn() => 'ジャンル一覧画面')->name('genres.index');

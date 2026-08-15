@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\RankingController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', [BookController::class, 'index']);
 Route::get('/books', [BookController::class, 'index'])->name('books.index');
+
+Route::get('/ranking', RankingController::class)->name('ranking.index');
+
+Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
@@ -40,8 +45,3 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/genres/{genre}', [GenreController::class, 'update'])->name('genres.update');
     Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
 });
-
-Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
-
-//あとで実装するランキング機能
-Route::get('/ranking', fn() => 'ランキング画面')->name('ranking.index');

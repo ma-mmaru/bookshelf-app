@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genre;
-use Illuminate\Http\Request;
+use App\Http\Requests\GenreRequest;
 
 class GenreController extends Controller
 {
@@ -34,5 +34,17 @@ class GenreController extends Controller
             ->paginate(10);
 
         return view('genres.show', compact('genre', 'books'));
+    }
+
+    public function create()
+    {
+        return view ('genres.create');
+    }
+
+    public function store(GenreRequest $request)
+    {
+        Genre::create($request->validated());
+
+        return redirect()->route('genres.index')->with('status', 'ジャンルを登録しました。');
     }
 }

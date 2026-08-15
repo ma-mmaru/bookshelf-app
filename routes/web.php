@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\GenreController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,12 +32,14 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
+    Route::get('/genres/create', [GenreController::class, 'create'])->name('genres.create');
+    Route::get('/genres/{genre}', [GenreController::class, 'show'])->name('genres.show');
+    Route::get('/genres/{genre}/edit', [GenreController::class, 'edit'])->name('genres.edit');
+    Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
 });
 
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
 //あとで実装するランキング機能
 Route::get('/ranking', fn() => 'ランキング画面')->name('ranking.index');
-
-//あとで実装するジャンル一覧
-Route::get('/genres', fn() => 'ジャンル一覧画面')->name('genres.index');

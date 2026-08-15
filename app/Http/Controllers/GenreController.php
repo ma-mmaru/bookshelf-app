@@ -25,4 +25,14 @@ class GenreController extends Controller
         return redirect()->route('genres.index')
             ->with('status', 'ジャンルを削除しました。');
     }
+
+    public function show(Genre $genre)
+    {
+        $books = $genre->books()
+            ->with('genres')
+            ->latest()
+            ->paginate(10);
+
+        return view('genres.show', compact('genre', 'books'));
+    }
 }

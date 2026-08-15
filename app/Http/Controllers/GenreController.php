@@ -47,4 +47,16 @@ class GenreController extends Controller
 
         return redirect()->route('genres.index')->with('status', 'ジャンルを登録しました。');
     }
+
+    public function edit(Genre $genre)
+    {
+        return view('genres.edit', compact('genre'));
+    }
+
+    public function update(GenreRequest $request, Genre $genre)
+    {
+        $genre->update($request->validated());
+
+        return redirect()->route('genres.index')->with('status', 'ジャンル名を更新しました。');
+    }
 }

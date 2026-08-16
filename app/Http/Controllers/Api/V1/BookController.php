@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\BookIndexRequest;
+use App\Http\Requests\Api\V1\StoreBookRequest;
 use App\Http\Resources\Api\V1\BookDetailResource;
 use App\Http\Resources\Api\V1\BookResource;
 use App\Models\Book;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -40,5 +42,24 @@ class BookController extends Controller
         $book->load(['genres', 'reviews.user']);
 
         return new BookDetailResource($book);
+    }
+
+    public function store(StoreBookRequest $request)
+    {
+        $book = DB::transaction(function () use ($request) {
+            $book = Book::create($request->only([
+                'title', 'author', 'isbn', 'description', 'published_date', 'user_id'
+            ]));
+
+            $book->genres()->sync($request->input('genre_ids'));
+
+            return $book;
+        });
+
+        $book->load(['genres', 'reviews.user']);
+
+        return (new BookDetailResource($book))
+            ->response()
+            ->setStatusCode(201);
     }
 }

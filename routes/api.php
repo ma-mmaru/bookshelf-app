@@ -19,4 +19,5 @@ Route::prefix('v1')->group(function () {
     Route::get('/books', [BookController::class, 'index'])->name('api.v1.books.index');
     Route::get('/books/{book}', [BookController::class, 'show'])->name('api.v1.books.show');
     Route::post('/books', [BookController::class, 'store'])->name('api.v1.books.store');
+    Route::put('/books/{book}', [BookController::class, 'update'])->name('api.v1.books.update');
 });

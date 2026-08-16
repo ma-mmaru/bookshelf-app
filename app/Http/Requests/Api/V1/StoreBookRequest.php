@@ -39,7 +39,7 @@ class StoreBookRequest extends FormRequest
             'title.required' => 'タイトルを入力してください。',
             'author.required' => '著者名を入力してください。',
             'isbn.required' => 'ISBNを入力してください。',
-            'isbn.unique' => 'このISBNは既に登録されています。',
+            'isbn.unique' => 'そのISBNは既に登録されています。',
             'published_date.required' => '出版日を入力してください。',
             'user_id.required' => '登録者IDを入力してください。',
             'user_id.exists' => '指定された登録者IDが存在しません。',

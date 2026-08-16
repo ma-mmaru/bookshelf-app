@@ -44,7 +44,7 @@ class BookRequest extends FormRequest
             'title.required' => 'タイトルを入力してください。',
             'author.required' => '著者名を入力してください。',
             'isbn.required' => 'ISBNを入力してください。',
-            'isbn.unique' => 'このISBNは既に登録されています。',
+            'isbn.unique' => 'そのISBNは既に登録されています。',
             'published_date.required' => '出版日を入力してください。',
             'published_date.date' => '出版日は正しい日付形式で入力してください。',
             'image_url.url' => '画像URLは「http://」または「https://」から始まる正しいURL形式で入力してください。',

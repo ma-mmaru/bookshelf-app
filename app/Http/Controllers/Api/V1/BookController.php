@@ -79,4 +79,25 @@ class BookController extends Controller
 
         return new BookDetailResource($book);
     }
+
+    public function destroy(Book $book)
+    {
+        DB::transaction(function () use ($book) {
+            $book->genres()->detach();
+
+            if (method_exists($book, 'reviews')) {
+                $book->reviews()->delete();
+            }
+
+            if (method_exists($book, 'favorite')) {
+                $book->favorites()->delete();
+            }
+
+            $book->delete();
+        });
+        
+        return response()->json([
+            'message' => '書籍を削除しました。'
+        ], 200);
+    }
 }

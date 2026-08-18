@@ -69,7 +69,7 @@ class BookController extends Controller
         DB::transaction(function () use ($request, $book) {
 
             $book->update($request->only([
-                'title', 'author', 'isbn', 'description', 'published_at'
+                'title', 'author', 'isbn', 'description', 'published_date'
             ]));
 
             $book->genres()->sync($request->input('genre_ids'));

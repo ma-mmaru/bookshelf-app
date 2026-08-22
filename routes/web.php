@@ -45,3 +45,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/genres/{genre}', [GenreController::class, 'update'])->name('genres.update');
     Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
 });
+
+//実装予定
+Route::get('/reports', function () {
+    return 'レポート画面実装予定';
+})->name('reports.index');
+
+//実装予定
+Route::get('/reading-plans', function () {
+    return '読書計画一覧画面実装予定';
+})->name('reading-plans.index');

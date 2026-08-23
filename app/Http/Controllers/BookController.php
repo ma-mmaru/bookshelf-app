@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Genre;
 use App\Http\Requests\BookRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class BookController extends Controller
 {
@@ -71,13 +72,13 @@ class BookController extends Controller
         $book = auth()->user()->books()->create([
             'title' => $validated['title'],
             'author' => $validated['author'],
-            'isbn' => $validated['isbn'],
-            'published_date' => $validated['published_date'],
+            'isbn' => $validated['isbn'] ?? null,
+            'published_date' => $validated['published_date'] ?? null,
             'description' => $validated['description'] ?? null,
             'image_url' => $validated['image_url'] ?? null,
         ]);
 
-        $book->genres()->sync($validated['genres']);
+        $book->genres()->sync($validated['genres'] ?? []);
 
         return redirect()->route('books.show', $book)->with('status', '書籍を登録しました。');
     }
@@ -100,13 +101,13 @@ class BookController extends Controller
         $book->update([
             'title' => $validated['title'],
             'author' => $validated['author'],
-            'isbn' => $validated['isbn'],
-            'published_date' => $validated['published_date'],
+            'isbn' => $validated['isbn'] ?? null,
+            'published_date' => $validated['published_date'] ?? null,
             'description' => $validated['description'] ?? null,
             'image_url' => $validated['image_url'] ?? null,
         ]);
 
-        $book->genres()->sync($validated['genres']);
+        $book->genres()->sync($validated['genres'] ?? []);
 
         return redirect()->route('books.show', $book)->with('status', '書籍情報を更新しました。');
     }
@@ -118,5 +119,57 @@ class BookController extends Controller
         $book->delete();
 
         return redirect()->route('books.index')->with('status', '書籍を削除しました。');
+    }
+
+    public function searchIsbn(string $isbn)
+    {
+        if (!preg_match('/^\d{13}$/', $isbn)) {
+            return response()->json([
+                'error' => 'ISBNは13桁の半角数字で入力してください。'
+            ], 400);
+        }
+
+        $apiKey = env('GOOGLE_BOOKS_API_KEY');
+
+        $params = [
+            'q' => "isbn:{$isbn}"
+        ];
+
+        if ($apiKey) {
+            $params['key'] = $apiKey;
+        }
+
+        $response = Http::withHeaders([
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        ])->get("https://www.googleapis.com/books/v1/volumes", $params);
+
+        if ($response->failed()) {
+            return response()->json([
+                'error' => 'APIからの情報取得に失敗しました。'
+            ], 500);
+        }
+
+        $data = $response->json();
+
+        if (($data['totalItems'] ?? 0) === 0 || empty($data['items'])) {
+            return response()->json([
+                'error' => '該当する書籍が見つかりませんでした。'
+            ], 404);
+        }
+
+        $volumeInfo = $data['items'][0]['volumeInfo'] ?? [];
+
+        $imageUrl = $volumeInfo['imageLinks']['thumbnail'] ?? null;
+        if ($imageUrl) {
+            $imageUrl = str_replace('http://', 'https://', $imageUrl);
+        }
+
+        return response()->json([
+            'title' => $volumeInfo['title'] ?? '',
+            'author' => isset($volumeInfo['authors']) ? implode(', ', $volumeInfo['authors']) : '',
+            'published_date' => $volumeInfo['publishedDate'] ?? '',
+            'description' => $volumeInfo['description'] ?? '',
+            'image_url' => $imageUrl,
+        ], 200);
     }
 }

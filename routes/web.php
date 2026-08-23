@@ -4,6 +4,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,12 +47,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/genres/{genre}/edit', [GenreController::class, 'edit'])->name('genres.edit');
     Route::put('/genres/{genre}', [GenreController::class, 'update'])->name('genres.update');
     Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 });
-
-//実装予定
-Route::get('/reports', function () {
-    return 'レポート画面実装予定';
-})->name('reports.index');
 
 //実装予定
 Route::get('/reading-plans', function () {

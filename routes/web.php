@@ -19,17 +19,18 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', [BookController::class, 'index']);
 Route::get('/books', [BookController::class, 'index'])->name('books.index');
-
 Route::get('/ranking', RankingController::class)->name('ranking.index');
-
-Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
+    Route::get('/books/isbn/{isbn}', [BookController::class, 'searchIsbn'])->name('books.isbn');
+
+    Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
+    //お気に入り・レビュー
     Route::post('/books/{book}/favorites', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
     Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
     Route::post('/reviews/{review}/like', [ReviewController::class, 'like'])->name('reviews.like');
@@ -37,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    //ジャンル
     Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
     Route::get('/genres/create', [GenreController::class, 'create'])->name('genres.create');
     Route::post('/genres', [GenreController::class, 'store'])->name('genres.store');
@@ -55,3 +57,8 @@ Route::get('/reports', function () {
 Route::get('/reading-plans', function () {
     return '読書計画一覧画面実装予定';
 })->name('reading-plans.index');
+
+//実装予定
+Route::get('/notifications', function() {
+    return view('notifications.index');
+})->name('notifications.index');

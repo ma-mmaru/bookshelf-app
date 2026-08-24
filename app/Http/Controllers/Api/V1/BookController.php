@@ -9,6 +9,7 @@ use App\Http\Requests\Api\V1\UpdateBookRequest;
 use App\Http\Resources\Api\V1\BookDetailResource;
 use App\Http\Resources\Api\V1\BookResource;
 use App\Models\Book;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
@@ -48,11 +49,17 @@ class BookController extends Controller
     public function store(StoreBookRequest $request)
     {
         $book = DB::transaction(function () use ($request) {
-            $book = Book::create($request->only([
-                'title', 'author', 'isbn', 'description', 'published_date', 'user_id'
-            ]));
+            $data = $request->only([
+                'title', 'author', 'isbn', 'description', 'published_date'
+            ]);
 
-            $book->genres()->sync($request->input('genre_ids'));
+            $data['user_id'] = $request->user()->id;
+
+            $book = Book::create($data);
+
+            if ($request->has('genre_ids')) {
+                $book->genres()->sync($request->input('genre_ids'));
+            }
 
             return $book;
         });
@@ -66,13 +73,20 @@ class BookController extends Controller
 
     public function update(UpdateBookRequest $request, Book $book)
     {
-        DB::transaction(function () use ($request, $book) {
+        if ($request->user()->id !== $book->user_id) {
+            return response()->json([
+                'message' => 'この書籍を修正する権限がありません。'
+            ], 403);
+        }
 
+        DB::transaction(function () use ($request, $book) {
             $book->update($request->only([
                 'title', 'author', 'isbn', 'description', 'published_date'
             ]));
 
-            $book->genres()->sync($request->input('genre_ids'));
+            if ($request->has('genre_ids')) {
+                $book->genres()->sync($request->input('genre_ids'));
+            }
         });
 
         $book->load(['genres', 'reviews.user']);
@@ -80,8 +94,14 @@ class BookController extends Controller
         return new BookDetailResource($book);
     }
 
-    public function destroy(Book $book)
+    public function destroy(Request $request, Book $book)
     {
+        if ($request->user()->id !== $book->user_id) {
+            return response()->json([
+                'message' => 'この書籍を削除する権限がありません。'
+            ], 403);
+        }
+
         DB::transaction(function () use ($book) {
             $book->genres()->detach();
 
@@ -89,13 +109,13 @@ class BookController extends Controller
                 $book->reviews()->delete();
             }
 
-            if (method_exists($book, 'favorite')) {
+            if (method_exists($book, 'favorites')) {
                 $book->favorites()->delete();
             }
 
             $book->delete();
         });
-        
+
         return response()->json([
             'message' => '書籍を削除しました。'
         ], 200);

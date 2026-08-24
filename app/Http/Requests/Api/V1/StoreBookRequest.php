@@ -27,7 +27,6 @@ class StoreBookRequest extends FormRequest
             'isbn' => ['required', 'string', 'max:20', 'unique:books,isbn'],
             'description' => ['nullable', 'string'],
             'published_date' => ['required', 'date'],
-            'user_id' => ['required', 'integer','exists:users,id'],
             'genre_ids' => ['required', 'array', 'min:1'],
             'genre_ids.*' => ['integer', 'exists:genres,id'],
         ];
@@ -41,8 +40,6 @@ class StoreBookRequest extends FormRequest
             'isbn.required' => 'ISBNを入力してください。',
             'isbn.unique' => 'そのISBNは既に登録されています。',
             'published_date.required' => '出版日を入力してください。',
-            'user_id.required' => '登録者IDを入力してください。',
-            'user_id.exists' => '指定された登録者IDが存在しません。',
             'genre_ids.required' => 'ジャンルを1つ以上選択してください。',
             'genre_ids.*.exists' => '指定されたジャンルIDは存在しません。',
         ];

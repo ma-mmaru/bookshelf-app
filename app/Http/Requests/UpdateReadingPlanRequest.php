@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\ReadingPlanStatus;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateReadingPlanRequest extends FormRequest
@@ -11,7 +12,12 @@ class UpdateReadingPlanRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        $plan =$this->route('plan');
+
+        return auth()->check()
+            && $plan
+            && $plan->user_id === $this->user()->id
+            && $plan->status !== ReadingPlanStatus::Completed;
     }
 
     /**

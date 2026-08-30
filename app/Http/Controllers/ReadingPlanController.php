@@ -38,7 +38,7 @@ class ReadingPlanController extends Controller
 
         $request->user()->readingPlans()->create([
             'book_id' => $validated['book_id'],
-            'target_completion_date' => $validated['target_date'],
+            'target_date' => $validated['target_date'],
             'status' => ReadingPlanStatus::Planned,
         ]);
 
@@ -63,7 +63,7 @@ class ReadingPlanController extends Controller
         $validated = $request->validated();
 
         $plan->update([
-            'target_completion_date' => $validated['target_date'],
+            'target_date' => $validated['target_date'],
         ]);
 
         return redirect()->route('reading-plans.index')->with('success', '読書計画を更新しました。');
@@ -82,7 +82,10 @@ class ReadingPlanController extends Controller
     {
         $this->authorize('complete', $plan);
 
-        $plan->update(['status' => ReadingPlanStatus::Completed]);
+        $plan->update([
+            'status' => ReadingPlanStatus::Completed,
+            'completed_at' => now(),
+        ]);
 
         return redirect()->route('reading-plans.index')->with('success', '読了に設定しました！');
     }

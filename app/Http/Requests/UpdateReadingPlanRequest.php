@@ -14,10 +14,7 @@ class UpdateReadingPlanRequest extends FormRequest
     {
         $plan =$this->route('plan');
 
-        return auth()->check()
-            && $plan
-            && $plan->user_id === $this->user()->id
-            && $plan->status !== ReadingPlanStatus::Completed;
+        return $plan && $this->user()?->can('update', $plan);
     }
 
     /**

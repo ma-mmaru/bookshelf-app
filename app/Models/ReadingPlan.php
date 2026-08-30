@@ -15,18 +15,18 @@ class ReadingPlan extends Model
         'user_id',
         'book_id',
         'status',
-        'target_completion_date',
+        'target_date',
         'notes',
     ];
 
     protected $casts = [
         'status' => ReadingPlanStatus::class,
-        'target_completion_date' => 'date',
+        'target_date' => 'date',
     ];
 
     public function getTargetDateAttribute()
     {
-        return $this->target_completion_date ?? now();
+        return $this->target_date ?? now();
     }
 
     public function user(): BelongsTo

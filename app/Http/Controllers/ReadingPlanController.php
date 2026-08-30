@@ -58,8 +58,6 @@ class ReadingPlanController extends Controller
 
     public function update(UpdateReadingPlanRequest $request, ReadingPlan $plan)
     {
-        $this->authorize('update', $plan);
-
         $validated = $request->validated();
 
         $plan->update([
@@ -84,7 +82,6 @@ class ReadingPlanController extends Controller
 
         $plan->update([
             'status' => ReadingPlanStatus::Completed,
-            'completed_at' => now(),
         ]);
 
         return redirect()->route('reading-plans.index')->with('success', '読了に設定しました！');

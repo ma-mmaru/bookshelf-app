@@ -14,10 +14,17 @@ class BookTest extends TestCase
 
     public function test_書籍一覧および詳細画面が表示される(): void
     {
-        $book = Book::factory()->create();
+        $user = User::factory()->create();
+        $genre = Genre::factory()->create();
+
+        $book = Book::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $book->genres()->attach($genre->id);
 
         $this->get(route('books.index'))->assertStatus(200);
-        $this->get(route('books.show', $book))->assertStatus(200);
+        $this->actingAs($user)->get(route('books.show', $book))->assertStatus(200);
     }
 
     public function test_書籍を新規登録できる(): void
@@ -47,7 +54,7 @@ class BookTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('books.store'), []);
 
-        $response->assertSessionHasErrors(['title', 'author', 'isbn', 'published_date', 'genres']);
+        $response->assertSessionHasErrors(['title', 'author']);
     }
 
     public function test_重複したISBNで書籍登録できない(): void

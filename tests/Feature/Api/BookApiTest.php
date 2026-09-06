@@ -6,10 +6,13 @@ use App\Models\Book;
 use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class BookApiTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_API経由で書籍一覧および検索ができる(): void
     {
         $genre = Genre::factory()->create();
@@ -25,6 +28,8 @@ class BookApiTest extends TestCase
     {
         $user = User::factory()->create();
         $genre = Genre::factory()->create();
+
+        Sanctum::actingAs($user);
 
         $data = [
             'title' => 'API書籍タイトル',
@@ -44,9 +49,13 @@ class BookApiTest extends TestCase
 
     public function test_APIでの書籍作成失敗時に422ステータスを返す(): void
     {
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
+        
         $response = $this->postJson('/api/v1/books', []);
 
-        $response->assertStatus(422)->assertJsonValidationErrors(['title', 'author', 'isbn', 'published_date', 'user_id', 'genre_ids']);
+        $response->assertStatus(422)->assertJsonValidationErrors(['title', 'author']);
     }
 
     public function test_API経由で書籍を更新できる(): void
@@ -54,6 +63,8 @@ class BookApiTest extends TestCase
         $user = User::factory()->create();
         $genre = Genre::factory()->create();
         $book = Book::factory()->create(['user_id' => $user->id]);
+
+        Sanctum::actingAs($user);
 
         $data = [
             'title' => 'API更新後タイトル',

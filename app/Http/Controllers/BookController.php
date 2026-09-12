@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookRequest;
 use App\Models\Book;
 use App\Models\Genre;
-use App\Http\Requests\BookRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -37,7 +37,7 @@ class BookController extends Controller
                 break;
             case 'rating':
                 $query->orderByRaw('reviews_avg_rating IS NULL ASC')
-                        ->orderBy('reviews_avg_rating', 'desc');
+                    ->orderBy('reviews_avg_rating', 'desc');
                 break;
             case 'newest':
             default:
@@ -45,7 +45,7 @@ class BookController extends Controller
                 break;
         }
 
-        $books =$query->paginate(10)->withQueryString();
+        $books = $query->paginate(10)->withQueryString();
 
         $genres = Genre::all();
 
@@ -62,6 +62,7 @@ class BookController extends Controller
     public function create()
     {
         $genres = Genre::all();
+
         return view('books.create', compact('genres'));
     }
 
@@ -89,6 +90,7 @@ class BookController extends Controller
 
         $book->load('genres');
         $genres = Genre::all();
+
         return view('books.edit', compact('book', 'genres'));
     }
 
@@ -123,16 +125,16 @@ class BookController extends Controller
 
     public function searchIsbn(string $isbn)
     {
-        if (!preg_match('/^\d{13}$/', $isbn)) {
+        if (! preg_match('/^\d{13}$/', $isbn)) {
             return response()->json([
-                'error' => 'ISBNは13桁の半角数字で入力してください。'
+                'error' => 'ISBNは13桁の半角数字で入力してください。',
             ], 400);
         }
 
         $apiKey = env('GOOGLE_BOOKS_API_KEY');
 
         $params = [
-            'q' => "isbn:{$isbn}"
+            'q' => "isbn:{$isbn}",
         ];
 
         if ($apiKey) {
@@ -141,11 +143,11 @@ class BookController extends Controller
 
         $response = Http::withHeaders([
             'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-        ])->get("https://www.googleapis.com/books/v1/volumes", $params);
+        ])->get('https://www.googleapis.com/books/v1/volumes', $params);
 
         if ($response->failed()) {
             return response()->json([
-                'error' => 'APIからの情報取得に失敗しました。'
+                'error' => 'APIからの情報取得に失敗しました。',
             ], 500);
         }
 
@@ -153,7 +155,7 @@ class BookController extends Controller
 
         if (($data['totalItems'] ?? 0) === 0 || empty($data['items'])) {
             return response()->json([
-                'error' => '該当する書籍が見つかりませんでした。'
+                'error' => '該当する書籍が見つかりませんでした。',
             ], 404);
         }
 

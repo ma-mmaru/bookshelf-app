@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReviewRequest;
 use App\Models\Book;
 use App\Models\Review;
-use App\Http\Requests\ReviewRequest;
 
 class ReviewController extends Controller
 {

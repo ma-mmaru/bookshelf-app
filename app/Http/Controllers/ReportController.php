@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -37,7 +36,7 @@ class ReportController extends Controller
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get()
-            ->filter(fn($review) => $review->book !== null)
+            ->filter(fn ($review) => $review->book !== null)
             ->map(function ($review) {
                 return [
                     'id' => $review->book->id,
@@ -50,23 +49,23 @@ class ReportController extends Controller
             ->toArray();
 
         $genreRatings = DB::table('book_genre')
-        ->join('books', 'book_genre.book_id', '=', 'books.id')
-        ->join('reviews', 'books.id', '=', 'reviews.book_id')
-        ->join('genres', 'book_genre.genre_id', '=', 'genres.id')
-        ->where('reviews.user_id', $user->id)
-        ->select('genres.id', 'genres.name', DB::raw('avg(reviews.rating) as average_rating'), DB::raw('count(reviews.id) as count'))
-        ->groupBy('genres.id', 'genres.name')
-        ->orderBy('average_rating', 'desc')
-        ->take(5)
-        ->get()
-        ->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'count' => $item->count,
-                'average_rating' => (float) $item->average_rating,
-            ];
-        })->toArray();
+            ->join('books', 'book_genre.book_id', '=', 'books.id')
+            ->join('reviews', 'books.id', '=', 'reviews.book_id')
+            ->join('genres', 'book_genre.genre_id', '=', 'genres.id')
+            ->where('reviews.user_id', $user->id)
+            ->select('genres.id', 'genres.name', DB::raw('avg(reviews.rating) as average_rating'), DB::raw('count(reviews.id) as count'))
+            ->groupBy('genres.id', 'genres.name')
+            ->orderBy('average_rating', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'count' => $item->count,
+                    'average_rating' => (float) $item->average_rating,
+                ];
+            })->toArray();
 
         $stats = [
             'summary' => [

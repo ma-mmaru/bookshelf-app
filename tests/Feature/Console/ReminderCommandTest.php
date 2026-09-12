@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Console;
 
+use App\Enums\ReadingPlanStatus;
+use App\Models\Book;
 use App\Models\ReadingPlan;
 use App\Models\User;
-use App\Models\Book;
-use App\Enums\ReadingPlanStatus;
 use App\Notifications\ReadingPlanDueDateNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;

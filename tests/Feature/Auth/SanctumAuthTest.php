@@ -11,7 +11,7 @@ class SanctumAuthTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_SanctumトークンによるAPI認証と保護ルートへのアクセスができること(): void
+    public function test_sanctumトークンによる_ap_i認証と保護ルートへのアクセスができること(): void
     {
         $user = User::factory()->create();
 

@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 
 class ReadingPlanDueDateNotification extends Notification
@@ -17,10 +16,7 @@ class ReadingPlanDueDateNotification extends Notification
         public string $title,
         public string $body,
         public string $timing,
-    )
-    {
-
-    }
+    ) {}
 
     /**
      * Get the notification's delivery channels.

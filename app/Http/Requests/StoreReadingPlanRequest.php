@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\ReadingPlanStatus;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,16 +20,16 @@ class StoreReadingPlanRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
             'book_id' => ['required', 'exists:books,id', Rule::unique('reading_plans', 'book_id')->where(function ($query) {
                 return $query->where('user_id', $this->user()->id)->where('status', '!=', ReadingPlanStatus::Completed->value);
-                }),
+            }),
             ],
-            'target_date' => ['required', 'date', 'after_or_equal:today',],
+            'target_date' => ['required', 'date', 'after_or_equal:today'],
         ];
     }
 

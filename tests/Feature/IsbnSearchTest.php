@@ -11,7 +11,7 @@ class IsbnSearchTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_ISBNコードを指定して外部APIから書籍情報を取得できること(): void
+    public function test_isb_nコードを指定して外部_ap_iから書籍情報を取得できること(): void
     {
         $user = User::factory()->create();
 

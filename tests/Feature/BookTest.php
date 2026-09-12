@@ -57,7 +57,7 @@ class BookTest extends TestCase
         $response->assertSessionHasErrors(['title', 'author']);
     }
 
-    public function test_重複したISBNで書籍登録できない(): void
+    public function test_重複した_isb_nで書籍登録できない(): void
     {
         $user = User::factory()->create();
         $existingBook = Book::factory()->create(['isbn' => '9784798160000']);

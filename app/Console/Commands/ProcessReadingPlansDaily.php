@@ -38,11 +38,11 @@ class ProcessReadingPlansDaily extends Command
 
         foreach ($activePlans as $plan) {
             $rawDate = $plan->getRawOriginal('target_date');
-            if (!$rawDate) {
+            if (! $rawDate) {
                 continue;
             }
 
-            $dueDate =Carbon::parse($rawDate)->startOfDay();
+            $dueDate = Carbon::parse($rawDate)->startOfDay();
 
             $diffDays = (int) $today->diffInDays($dueDate, false);
             $bookTitle = $plan->book->title ?? '書籍';
@@ -72,10 +72,11 @@ class ProcessReadingPlansDaily extends Command
             }
         }
 
-    ReadingPlan::where('target_date', '<', $today)->whereIn('status', [ReadingPlanStatus::Planned, ReadingPlanStatus::InProgress,])
-        ->update(['status' => ReadingPlanStatus::Overdue]);
+        ReadingPlan::where('target_date', '<', $today)->whereIn('status', [ReadingPlanStatus::Planned, ReadingPlanStatus::InProgress])
+            ->update(['status' => ReadingPlanStatus::Overdue]);
 
-    $this->info('日次バッチ処理が正常に完了しました。');
-    return Command::SUCCESS;
+        $this->info('日次バッチ処理が正常に完了しました。');
+
+        return Command::SUCCESS;
     }
 }

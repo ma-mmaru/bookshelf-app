@@ -33,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
-    //お気に入り・レビュー
+    // お気に入り・レビュー
     Route::post('/books/{book}/favorites', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
     Route::post('/books/{book}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
     Route::post('/reviews/{review}/like', [ReviewController::class, 'like'])->name('reviews.like');
@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/reviews/{review}', [ReviewController::class, 'update'])->name('reviews.update');
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
-    //ジャンル
+    // ジャンル
     Route::get('/genres', [GenreController::class, 'index'])->name('genres.index');
     Route::get('/genres/create', [GenreController::class, 'create'])->name('genres.create');
     Route::post('/genres', [GenreController::class, 'store'])->name('genres.store');
@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/genres/{genre}', [GenreController::class, 'update'])->name('genres.update');
     Route::delete('/genres/{genre}', [GenreController::class, 'destroy'])->name('genres.destroy');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    //読書計画
+    // 読書計画
     Route::get('/reading-plans', [ReadingPlanController::class, 'index'])->name('reading-plans.index');
     Route::get('/reading-plans/create', [ReadingPlanController::class, 'create'])->name('reading-plans.create');
     Route::post('/reading-plans', [ReadingPlanController::class, 'store'])->name('reading-plans.store');
@@ -58,7 +58,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/reading-plans/{plan}', [ReadingPlanController::class, 'update'])->name('reading-plans.update');
     Route::delete('/reading-plans/{plan}', [ReadingPlanController::class, 'destroy'])->name('reading-plans.destroy');
     Route::post('/reading-plans/{plan}/complete', [ReadingPlanController::class, 'complete'])->name('reading-plans.complete');
-    //通知
+    // 通知
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [NotificationController::class, 'read'])->name('notifications.read');
 });

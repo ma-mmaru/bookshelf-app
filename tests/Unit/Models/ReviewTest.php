@@ -5,7 +5,7 @@ namespace Tests\Unit\Models;
 use App\Models\Book;
 use App\Models\Review;
 use App\Models\User;
-Use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 

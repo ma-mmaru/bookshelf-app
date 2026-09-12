@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Genre;
 use App\Http\Requests\GenreRequest;
+use App\Models\Genre;
 
 class GenreController extends Controller
 {
@@ -38,7 +38,7 @@ class GenreController extends Controller
 
     public function create()
     {
-        return view ('genres.create');
+        return view('genres.create');
     }
 
     public function store(GenreRequest $request)

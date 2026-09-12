@@ -50,7 +50,7 @@ class BookController extends Controller
     {
         $book = DB::transaction(function () use ($request) {
             $data = $request->only([
-                'title', 'author', 'isbn', 'description', 'published_date'
+                'title', 'author', 'isbn', 'description', 'published_date',
             ]);
 
             $data['user_id'] = $request->user()->id;
@@ -75,13 +75,13 @@ class BookController extends Controller
     {
         if ($request->user()->id !== $book->user_id) {
             return response()->json([
-                'message' => 'この書籍を修正する権限がありません。'
+                'message' => 'この書籍を修正する権限がありません。',
             ], 403);
         }
 
         DB::transaction(function () use ($request, $book) {
             $book->update($request->only([
-                'title', 'author', 'isbn', 'description', 'published_date'
+                'title', 'author', 'isbn', 'description', 'published_date',
             ]));
 
             if ($request->has('genre_ids')) {
@@ -98,7 +98,7 @@ class BookController extends Controller
     {
         if ($request->user()->id !== $book->user_id) {
             return response()->json([
-                'message' => 'この書籍を削除する権限がありません。'
+                'message' => 'この書籍を削除する権限がありません。',
             ], 403);
         }
 
@@ -117,7 +117,7 @@ class BookController extends Controller
         });
 
         return response()->json([
-            'message' => '書籍を削除しました。'
+            'message' => '書籍を削除しました。',
         ], 200);
     }
 }

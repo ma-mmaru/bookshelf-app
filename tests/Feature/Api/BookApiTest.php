@@ -13,7 +13,7 @@ class BookApiTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_API経由で書籍一覧および検索ができる(): void
+    public function test_ap_i経由で書籍一覧および検索ができる(): void
     {
         $genre = Genre::factory()->create();
         $book = Book::factory()->create();
@@ -24,7 +24,7 @@ class BookApiTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_API経由で書籍を作成できる(): void
+    public function test_ap_i経由で書籍を作成できる(): void
     {
         $user = User::factory()->create();
         $genre = Genre::factory()->create();
@@ -47,18 +47,18 @@ class BookApiTest extends TestCase
         $this->assertDatabaseHas('books', ['isbn' => '9784798199999']);
     }
 
-    public function test_APIでの書籍作成失敗時に422ステータスを返す(): void
+    public function test_ap_iでの書籍作成失敗時に422ステータスを返す(): void
     {
         $user = User::factory()->create();
 
         Sanctum::actingAs($user);
-        
+
         $response = $this->postJson('/api/v1/books', []);
 
         $response->assertStatus(422)->assertJsonValidationErrors(['title', 'author']);
     }
 
-    public function test_API経由で書籍を更新できる(): void
+    public function test_ap_i経由で書籍を更新できる(): void
     {
         $user = User::factory()->create();
         $genre = Genre::factory()->create();

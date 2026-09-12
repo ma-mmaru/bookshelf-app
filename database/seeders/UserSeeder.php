@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             User::firstOrCreate(
                 ['email' => $user['email']],
-                ['name' => $user['name'], 'password' => Hash::make($user['password']),]
+                ['name' => $user['name'], 'password' => Hash::make($user['password'])]
             );
         }
     }

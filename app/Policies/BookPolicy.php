@@ -4,11 +4,9 @@ namespace App\Policies;
 
 use App\Models\Book;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class BookPolicy
 {
-
     /**
      * Determine whether the user can update the model.
      */

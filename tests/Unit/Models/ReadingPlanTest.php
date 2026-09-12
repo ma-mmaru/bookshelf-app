@@ -31,7 +31,7 @@ class ReadingPlanTest extends TestCase
         $this->assertEquals($book->id, $plan->book->id);
     }
 
-    public function test_status属性がReadingPlanStatusのEnum型にキャストされること(): void
+    public function test_status属性が_reading_plan_statusの_enum型にキャストされること(): void
     {
         $plan = ReadingPlan::factory()->create([
             'status' => ReadingPlanStatus::InProgress,

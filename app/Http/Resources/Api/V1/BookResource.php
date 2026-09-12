@@ -21,11 +21,11 @@ class BookResource extends JsonResource
             'isbn' => $this->isbn,
             'published_date' => $this->published_date,
             'user_id' => $this->user_id,
-            'genres' => $this->genres->map(fn($genre) => [
+            'genres' => $this->genres->map(fn ($genre) => [
                 'id' => $genre->id,
                 'name' => $genre->name,
             ]),
-            'avg_rating' => isset($this->reviews_avg_rating) ? round((float)$this->reviews_avg_rating, 2) : 0,
+            'avg_rating' => isset($this->reviews_avg_rating) ? round((float) $this->reviews_avg_rating, 2) : 0,
             'reviews_count' => $this->reviews_count ?? 0,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];

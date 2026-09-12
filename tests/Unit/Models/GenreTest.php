@@ -6,7 +6,7 @@ use App\Models\Book;
 use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-Use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class GenreTest extends TestCase

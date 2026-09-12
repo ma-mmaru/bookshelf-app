@@ -40,4 +40,25 @@ class GenreAndFavoriteTest extends TestCase
     {
         $this->get(route('ranking.index'))->assertStatus(200);
     }
+
+    public function test_お気に入りの登録および一覧表示ができること(): void
+    {
+        $user = User::factory()->create();
+        $book = Book::factory()->create();
+
+        $response = $this->actingAs($user)->post(route('favorites.toggle', $book));
+        $response->assertStatus(302);
+
+        $responseIndex = $this->actingAs($user)->get(route('favorites.index'));
+        $responseIndex->assertStatus(200);
+    }
+
+    public function test_ジャンルの操作ができること(): void
+    {
+        $user = User::factory()->create();
+        $genre = Genre::factory()->create();
+
+        $this->actingAs($user)->delete(route('genres.destroy', $genre));
+        $this->assertDatabaseMissing('genres', ['id' => $genre->id]);
+    }
 }

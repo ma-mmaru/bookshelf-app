@@ -52,4 +52,40 @@ class ReadingPlanFeatureTest extends TestCase
             'target_date' => $newDate,
         ]);
     }
+
+    public function test_読書計画の削除ができること(): void
+    {
+        $user = User::factory()->create();
+        $plan = ReadingPlan::factory()->create(['user_id' => $user->id]);
+
+        $response = $this->actingAs($user)->delete(route('reading-plans.destroy', $plan));
+        $response->assertStatus(302);
+    }
+
+    public function test_読書計画の一覧画面を表示できること(): void
+    {
+        $user = User::factory()->create();
+        ReadingPlan::factory()->count(3)->create(['user_id' => $user->id]);
+
+        $response = $this->actingAs($user)->get(route('reading-plans.index'));
+
+        $response->assertOk();
+    }
+
+    public function test_読書計画のステータスを読了に変更できること(): void
+    {
+        $user = User::factory()->create();
+        $plan = ReadingPlan::factory()->create([
+            'user_id' => $user->id,
+            'status' => ReadingPlanStatus::Planned,
+        ]);
+
+        $response = $this->actingAs($user)->post(route('reading-plans.complete', $plan));
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('reading_plans', [
+            'id' => $plan->id,
+            'status' => ReadingPlanStatus::Completed->value,
+        ]);
+    }
 }
